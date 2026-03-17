@@ -81,6 +81,8 @@ import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Sets;
 import com.typesafe.config.Config;
 
+import com.github.benmanes.caffeine.cache.simulator.policy.dash.DashRustPolicy;
+
 /**
  * The registry of caching policies.
  *
@@ -99,7 +101,8 @@ public final class Registry {
   }
 
   /**
-   * Returns all of the policies that have been configured for simulation and that meet a minimal
+   * Returns all of the policies that have been configured for simulation and that
+   * meet a minimal
    * set of supported characteristics.
    */
   public ImmutableSet<Policy> policies() {
@@ -120,6 +123,7 @@ public final class Registry {
     registerTwoQueue();
     registerAdaptive();
     registerGreedyDual();
+    registerDash();
   }
 
   /** Registers the policy based on the annotated name. */
@@ -233,6 +237,10 @@ public final class Registry {
     registerMany(CoherencePolicy.class, CoherencePolicy::policies);
     registerMany(HazelcastPolicy.class, HazelcastPolicy::policies);
     registerMany(ExpiringMapPolicy.class, ExpiringMapPolicy::policies);
+  }
+
+  private void registerDash() {
+    register(DashRustPolicy.class, DashRustPolicy::new);
   }
 
   record Factory(Class<? extends Policy> policyClass, Function<Config, Set<Policy>> creator) {
