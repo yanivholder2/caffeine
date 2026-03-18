@@ -81,6 +81,7 @@ import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Sets;
 import com.typesafe.config.Config;
 
+import com.github.benmanes.caffeine.cache.simulator.policy.associative.AssociativeCacheRustPolicy;
 import com.github.benmanes.caffeine.cache.simulator.policy.dash.DashRustPolicy;
 
 /**
@@ -240,7 +241,8 @@ public final class Registry {
   }
 
   private void registerDash() {
-    register(DashRustPolicy.class, DashRustPolicy::new);
+    registerMany(DashRustPolicy.class, DashRustPolicy::policies);
+    registerMany(AssociativeCacheRustPolicy.class, AssociativeCacheRustPolicy::policies);
   }
 
   record Factory(Class<? extends Policy> policyClass, Function<Config, Set<Policy>> creator) {
