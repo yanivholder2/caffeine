@@ -27,6 +27,9 @@ public class DashRustPolicy implements Policy.KeyOnlyPolicy {
     this.debugMode = 0;
 
     this.cachePointer = initDefaultCache();
+    if (this.cachePointer == 0) {
+      throw new RuntimeException("Failed to initialize Rust Dash cache");
+    }
   }
 
   public DashRustPolicy(DashSettings settings, DashRustEvictionPolicy evictionPolicy) {
@@ -48,6 +51,9 @@ public class DashRustPolicy implements Policy.KeyOnlyPolicy {
 
     this.cachePointer = initCache(numOfSegments, settings.numOfNormalBuckets(), settings.numOfStashBuckets(),
         settings.bucketSize(), evictionPolicy.ordinal(), this.debugMode);
+    if (this.cachePointer == 0) {
+      throw new RuntimeException("Failed to initialize Rust Dash cache (invalid settings or eviction policy)");
+    }
   }
 
   public static Set<Policy> policies(Config config) {

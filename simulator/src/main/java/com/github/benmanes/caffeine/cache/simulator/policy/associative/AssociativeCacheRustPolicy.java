@@ -37,6 +37,9 @@ public class AssociativeCacheRustPolicy implements Policy.KeyOnlyPolicy {
     }
 
     this.cachePointer = associativeInitCache(numOfBuckets, bucketSize, evictionPolicy.ordinal(), this.debugMode);
+    if (this.cachePointer == 0) {
+      throw new RuntimeException("Failed to initialize Rust AssociativeCache (invalid settings or eviction policy)");
+    }
   }
 
   public static Set<Policy> policies(Config config) {
