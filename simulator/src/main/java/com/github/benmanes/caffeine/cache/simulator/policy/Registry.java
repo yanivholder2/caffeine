@@ -83,6 +83,7 @@ import com.typesafe.config.Config;
 
 import com.github.benmanes.caffeine.cache.simulator.policy.associative.AssociativeCacheRustPolicy;
 import com.github.benmanes.caffeine.cache.simulator.policy.dash.DashRustPolicy;
+import com.github.benmanes.caffeine.cache.simulator.policy.lrurust.LruRustPolicy;
 
 /**
  * The registry of caching policies.
@@ -124,7 +125,7 @@ public final class Registry {
     registerTwoQueue();
     registerAdaptive();
     registerGreedyDual();
-    registerDash();
+    registerRust();
   }
 
   /** Registers the policy based on the annotated name. */
@@ -240,9 +241,10 @@ public final class Registry {
     registerMany(ExpiringMapPolicy.class, ExpiringMapPolicy::policies);
   }
 
-  private void registerDash() {
+  private void registerRust() {
     registerMany(DashRustPolicy.class, DashRustPolicy::policies);
     registerMany(AssociativeCacheRustPolicy.class, AssociativeCacheRustPolicy::policies);
+    registerMany(LruRustPolicy.class, LruRustPolicy::policies);
   }
 
   record Factory(Class<? extends Policy> policyClass, Function<Config, Set<Policy>> creator) {
