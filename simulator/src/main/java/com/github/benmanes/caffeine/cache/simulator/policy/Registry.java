@@ -82,7 +82,9 @@ import com.google.common.collect.Sets;
 import com.typesafe.config.Config;
 
 import com.github.benmanes.caffeine.cache.simulator.policy.associative.AssociativeCacheRustPolicy;
-import com.github.benmanes.caffeine.cache.simulator.policy.dash.DashRustPolicy;
+import com.github.benmanes.caffeine.cache.simulator.policy.dash.DashCombinedRustPolicy;
+import com.github.benmanes.caffeine.cache.simulator.policy.dash.DashPromotionColdRustPolicy;
+import com.github.benmanes.caffeine.cache.simulator.policy.dash.DashPromotionHotRustPolicy;
 import com.github.benmanes.caffeine.cache.simulator.policy.lrurust.LruRustPolicy;
 
 /**
@@ -242,7 +244,9 @@ public final class Registry {
   }
 
   private void registerRust() {
-    registerMany(DashRustPolicy.class, DashRustPolicy::policies);
+    registerMany(DashCombinedRustPolicy.class, DashCombinedRustPolicy::policies);
+    registerMany(DashPromotionColdRustPolicy.class, DashPromotionColdRustPolicy::policies);
+    registerMany(DashPromotionHotRustPolicy.class, DashPromotionHotRustPolicy::policies);
     registerMany(AssociativeCacheRustPolicy.class, AssociativeCacheRustPolicy::policies);
     registerMany(LruRustPolicy.class, LruRustPolicy::policies);
   }
